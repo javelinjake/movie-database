@@ -15,7 +15,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/starter-template.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
   </head>
 
   <body>
@@ -40,18 +40,64 @@
     </nav>
 
     <div class="container">
-
-      <div class="starter-template">
 		
-		<pre>{{ data | json:4 }}</pre>
+		<div class="button-row clearfix">
+			<div class="col-md-3">
+				<button ng-click="filters(filter1)" class="btn btn-default btn-lg btn-block">Top rated</button>
+			</div>
+			<div class="col-md-3">
+				<button ng-click="filters(filter2)" class="btn btn-default btn-lg btn-block">Lowest rated</button>
+			</div>
+			<div class="col-md-3">
+				<button ng-click="filters(filter3)" class="btn btn-default btn-lg btn-block">Future releases</button>
+			</div>
+			<div class="col-md-3">
+				<button ng-click="filters(filter4)" class="btn btn-default btn-lg btn-block">Most popular</button>
+			</div>
+		</div>
 		
-		<ul>
-			<li ng-repeat="movie in data.results">
-				<img src="https://image.tmdb.org/t/p/w185/{{movie.poster_path}}">
+		<ul class="movie-list list-unstyled clearfix">
+			<li class="col-md-3" ng-repeat="movie in movies.results" ng-click="moviePage(movie.id)">
+				<div class="movie-block">
+					
+					<!-- If backdrop available -->
+					<div ng-if="movie.backdrop_path" class="img-wrapper" style="background-image: url(https://image.tmdb.org/t/p/w300/{{movie.backdrop_path}});"></div>
+					
+					<!-- If backdrop not available (show poster) -->
+					<div ng-if="!movie.backdrop_path" class="img-wrapper background-top" style="background-image: url(https://image.tmdb.org/t/p/w300/{{movie.poster_path}});"></div>
+					
+					<div class="content-wrapper">
+						<h4>{{movie.title}}</h4>
+						<small>{{movie.release_date}}</small>
+						<div><strong>Score: </strong>{{movie.vote_average}}</div>
+					</div>
+					
+				</div>
 			</li>
 		</ul>
-		  
-      </div>
+		
+		<div class="movie-page img-wrapper" ng-show="moviePageTrue" style="background-image: url(https://image.tmdb.org/t/p/w1000/{{movieData.backdrop_path}});">
+			
+			<button class="btn btn-default back-to-filters" ng-click="hideMoviePage()">Back to filters</button>
+			
+			<div class="content-wrapper">
+				<h1>
+					{{movieData.title}}
+				</h1>
+				<h3>
+					{{movieData.tagline}}
+				</h3>
+				<p>
+					{{movieData.overview}}
+				</p>
+			</div>
+		</div>
+	
+		<button class="btn btn-default" ng-click="triggerMoviesJson = !triggerMoviesJson">Movies Json</button>
+		<pre ng-show="triggerMoviesJson">{{ movies | json:4 }}</pre>
+		
+		<button class="btn btn-default" ng-click="triggerMoviesDataJson = !triggerMoviesDataJson">Movie Data Json</button>
+		<pre ng-show="triggerMoviesDataJson">{{ movieData | json:4 }}</pre>
 
     </div><!-- /.container -->
 
